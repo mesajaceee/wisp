@@ -6,11 +6,8 @@ import com.google.gson.reflect.TypeToken
 import net.fabricmc.loader.api.FabricLoader
 import java.io.File
 
-/**
- * Manages a single shared JSON file with namespaced data
- */
-class JsonPersistenceManager(
-    fileName: String = "wisp/data.json"
+class JsonManager(
+    fileName: String
 ) {
     private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
     private val dataFile: File = FabricLoader.getInstance()
@@ -18,7 +15,6 @@ class JsonPersistenceManager(
         .resolve(fileName)
         .toFile()
 
-    // In-memory cache of all data
     private var rootData: MutableMap<String, Any> = mutableMapOf()
     private var loaded = false
 
@@ -26,9 +22,6 @@ class JsonPersistenceManager(
         dataFile.parentFile?.mkdirs()
     }
 
-    /**
-     * Load all data from file into memory
-     */
     private fun ensureLoaded() {
         if (!loaded) {
             rootData = if (dataFile.exists()) {
@@ -48,9 +41,6 @@ class JsonPersistenceManager(
         }
     }
 
-    /**
-     * Get a namespace handle for a specific data type
-     */
     fun <T> getNamespace(
         namespace: String,
         clazz: Class<T>,
@@ -59,12 +49,17 @@ class JsonPersistenceManager(
         return NamespaceHandle(this, namespace, clazz, defaultValue)
     }
 
-    /**
-     * Read data from a namespace
-     */
     internal fun <T> read(namespace: String, clazz: Class<T>, defaultValue: () -> T): T {
         ensureLoaded()
-        val rawData = rootData[namespace] ?: return defaultValue()
+        val rawData = rootData[namespace]
+
+        if (rawData == null) {
+            // Namespace missing → use defaults
+            val defaults = defaultValue()
+            rootData[namespace] = defaults as Any // save to rootData
+            save() // write defaults to file
+            return defaults
+        }
 
         return try {
             // Re-serialize to convert LinkedHashMap to proper type
@@ -76,27 +71,19 @@ class JsonPersistenceManager(
         }
     }
 
-    /**
-     * Write data to a namespace
-     */
+
     internal fun <T> write(namespace: String, data: T) {
         ensureLoaded()
         rootData[namespace] = data as Any
         save()
     }
 
-    /**
-     * Update data in a namespace
-     */
     internal fun <T> update(namespace: String, clazz: Class<T>, defaultValue: () -> T, block: T.() -> Unit) {
         val data = read(namespace, clazz, defaultValue)
         block(data)
         write(namespace, data)
     }
 
-    /**
-     * Save all data to file
-     */
     private fun save() {
         try {
             dataFile.writer().use { writer ->
@@ -108,11 +95,8 @@ class JsonPersistenceManager(
     }
 }
 
-/**
- * Handle for accessing a specific namespace within the persistence manager
- */
 class NamespaceHandle<T>(
-    private val manager: JsonPersistenceManager,
+    private val manager: JsonManager,
     private val namespace: String,
     private val clazz: Class<T>,
     private val defaultValue: () -> T

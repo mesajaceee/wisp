@@ -1,5 +1,8 @@
 package com.mesa.wisp.interaction
 
+import com.mesa.wisp.config.ConfigService
+import com.mesa.wisp.config.MessageKey
+import com.mesa.wisp.particle.ParticleSpawner
 import com.mesa.wisp.scoreboard.ScoreboardService
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.command.argument.EntityArgumentType
@@ -10,10 +13,18 @@ import java.util.Locale.getDefault
 
 object InteractionHandler {
     private val logger = LoggerFactory.getLogger("wisp")
+    private lateinit var configService: ConfigService
     private lateinit var scoreboardService: ScoreboardService
+    private lateinit var particleSpawner: ParticleSpawner
 
-    fun init(scoreboardService: ScoreboardService) {
+    fun init(
+        configService: ConfigService,
+        scoreboardService: ScoreboardService,
+        particleSpawner: ParticleSpawner
+    ) {
+        this.configService = configService
         this.scoreboardService = scoreboardService
+        this.particleSpawner = particleSpawner
     }
 
     fun handle(
@@ -36,21 +47,26 @@ object InteractionHandler {
 
         if (sender.uuid == target.uuid) {
             sender.sendMessage(
-                Text.literal("You ${interaction.verbPast} yourself!")
+                configService.getMessageText(MessageKey.interactionSelfError(interaction))
             )
 
             return 1
         }
 
         sender.sendMessage(
-            Text.literal("you ${interaction.verbPast} ${target?.name?.string}!")
+            configService.getMessageText(
+                MessageKey.interactionSenderSuccess(interaction),
+                mapOf("target" to target.name.string)
+            )
         )
 
         target.sendMessage(
-            Text.literal(
-                "${sender.name?.string} ${interaction.verbPast} you!"
+            configService.getMessageText(MessageKey.interactionTargetSuccess(interaction),
+                mapOf("sender" to sender.name.string)
             )
         )
+
+        particleSpawner.spawnParticlesInPlayer(sender, target, interaction)
 
         logger.info("${sender.name?.string} used /${interaction.name.lowercase(getDefault())} on ${target.name.string}")
 

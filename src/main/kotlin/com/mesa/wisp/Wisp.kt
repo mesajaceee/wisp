@@ -8,6 +8,10 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import org.slf4j.LoggerFactory
 
+object InternalConfig {
+    var OVERWRITE_CONFIG: Boolean = false
+}
+
 object Wisp : ModInitializer {
     private val logger = LoggerFactory.getLogger("wisp")
 
@@ -18,8 +22,16 @@ object Wisp : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             // Initialize handlers with services
-            InteractionHandler.init(Services.interactionScoreboard)
-            ScoreboardHandler.init(Services.interactionScoreboard)
+            InteractionHandler.init(
+                Services.configService,
+                Services.scoreboardService,
+                Services.particleSpawner
+            )
+
+            ScoreboardHandler.init(
+                Services.configService,
+                Services.scoreboardService
+            )
 
             // Register commands
             InteractionCommands.register(dispatcher)
