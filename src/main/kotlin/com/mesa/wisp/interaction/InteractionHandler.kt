@@ -29,16 +29,15 @@ object InteractionHandler {
 
         val target = EntityArgumentType.getPlayer(ctx, "target")
 
-        logger.info("count up!")
         scoreboardService.incrementInteraction(
             sender.uuid,
             sender.name.string,
             interaction)
 
         if (sender.uuid == target.uuid) {
-            ctx.source.server.playerManager.broadcast(
-                Text.literal("You ${interaction.verbPast} yourself!"),
-                false)
+            sender.sendMessage(
+                Text.literal("You ${interaction.verbPast} yourself!")
+            )
 
             return 1
         }
@@ -49,11 +48,11 @@ object InteractionHandler {
 
         target.sendMessage(
             Text.literal(
-                "${sender?.name?.string} ${interaction.verbPast} you!"
+                "${sender.name?.string} ${interaction.verbPast} you!"
             )
         )
 
-        logger.info("${sender?.name?.string} used /${interaction.name.lowercase(getDefault())} on ${target.name.string}")
+        logger.info("${sender.name?.string} used /${interaction.name.lowercase(getDefault())} on ${target.name.string}")
 
         return 1
     }
