@@ -17,13 +17,13 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "com.mesa.Wisp",
+				"value": "com.mesa.wisp.Wisp",
 				"adapter": "kotlin"
 			}
 		],
 		"client": [
 			{
-				"value": "com.mesa.WispClient",
+				"value": "com.mesa.wisp.WispClient",
 				"adapter": "kotlin"
 			}
 		]

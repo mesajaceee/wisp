@@ -1,4 +1,4 @@
-package com.mesa.mixin.client;
+package com.mesa.wisp.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,4 +1,4 @@
-package com.mesa.interaction
+package com.mesa.wisp.interaction
 
 import com.mojang.brigadier.CommandDispatcher
 import net.minecraft.command.argument.EntityArgumentType

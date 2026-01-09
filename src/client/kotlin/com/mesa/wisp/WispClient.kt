@@ -1,4 +1,4 @@
-package com.mesa
+package com.mesa.wisp
 
 import net.fabricmc.api.ClientModInitializer
 
