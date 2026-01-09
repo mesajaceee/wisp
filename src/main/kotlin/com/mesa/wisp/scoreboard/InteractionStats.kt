@@ -1,4 +1,4 @@
-package com.mesa.wisp.data
+package com.mesa.wisp.scoreboard
 
 import com.mesa.wisp.interaction.Interaction
 

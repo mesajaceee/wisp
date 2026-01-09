@@ -1,9 +1,9 @@
-package com.mesa.wisp.repository
+package com.mesa.wisp.scoreboard
 
 import com.mesa.wisp.interaction.Interaction
 import java.util.UUID
 
-interface InteractionScoreboardRepositoryBase {
+interface ScoreboardRepositoryBase {
     fun incrementInteraction(playerUuid: UUID, playerName: String, interaction: Interaction)
     fun getInteractionCount(playerUuid: UUID, interaction: Interaction): Int
     fun getTotalInteractions(playerUuid: UUID): Int

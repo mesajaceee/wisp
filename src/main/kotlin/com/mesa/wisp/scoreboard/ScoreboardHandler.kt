@@ -1,7 +1,6 @@
 package com.mesa.wisp.scoreboard
 
 import com.mesa.wisp.interaction.Interaction
-import com.mesa.wisp.service.InteractionScoreboardService
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -12,9 +11,9 @@ import java.util.*
 
 object ScoreboardHandler {
     private val logger = LoggerFactory.getLogger("wisp")
-    private lateinit var scoreboardService: InteractionScoreboardService
+    private lateinit var scoreboardService: ScoreboardService
 
-    fun init(service: InteractionScoreboardService) {
+    fun init(service: ScoreboardService) {
         scoreboardService = service
     }
 

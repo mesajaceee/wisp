@@ -1,15 +1,14 @@
-package com.mesa.wisp.service
+package com.mesa.wisp.scoreboard
 
 import com.mesa.wisp.interaction.Interaction
-import com.mesa.wisp.repository.InteractionScoreboardRepositoryBase
 import java.util.UUID
 
 /**
  * Service for managing interaction statistics and leaderboards
  * Delegates all storage operations to the InteractionStorage implementation
  */
-class InteractionScoreboardService(
-    private val repository: InteractionScoreboardRepositoryBase
+class ScoreboardService(
+    private val repository: ScoreboardRepositoryBase
 ) {
     fun incrementInteraction(playerUuid: UUID, playerName: String, interaction: Interaction) {
         repository.incrementInteraction(playerUuid, playerName, interaction)

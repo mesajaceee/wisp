@@ -1,14 +1,12 @@
-package com.mesa.wisp.repository
+package com.mesa.wisp.scoreboard
 
-import com.mesa.wisp.data.InteractionStatsData
-import com.mesa.wisp.data.PlayerInteractionStats
 import com.mesa.wisp.interaction.Interaction
 import com.mesa.wisp.storage.JsonPersistenceManager
 import java.util.UUID
 
-class InteractionScoreboardRepositoryJson(
+class ScoreboardRepositoryJson(
     persistenceManager: JsonPersistenceManager
-) : InteractionScoreboardRepositoryBase {
+) : ScoreboardRepositoryBase {
 
     // Get a namespaced handle for interaction data
     private val handle = persistenceManager.getNamespace(

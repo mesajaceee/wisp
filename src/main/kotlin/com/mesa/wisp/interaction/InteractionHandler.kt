@@ -1,6 +1,6 @@
 package com.mesa.wisp.interaction
 
-import com.mesa.wisp.service.InteractionScoreboardService
+import com.mesa.wisp.scoreboard.ScoreboardService
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.ServerCommandSource
@@ -10,9 +10,9 @@ import java.util.Locale.getDefault
 
 object InteractionHandler {
     private val logger = LoggerFactory.getLogger("wisp")
-    private lateinit var scoreboardService: InteractionScoreboardService
+    private lateinit var scoreboardService: ScoreboardService
 
-    fun init(scoreboardService: InteractionScoreboardService) {
+    fun init(scoreboardService: ScoreboardService) {
         this.scoreboardService = scoreboardService
     }
 
